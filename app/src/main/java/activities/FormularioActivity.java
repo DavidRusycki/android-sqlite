@@ -18,6 +18,8 @@ import android.widget.Toast;
 public class FormularioActivity extends Activity {
 
     private FormularioHelper helper;
+    private String localArquivoFoto;
+    private static final int TIRA_FOTO = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,6 @@ public class FormularioActivity extends Activity {
         if (alunoParaSerAlterado != null) {
             botao.setText("Alterar");
             helper.colocaAlunoNoFormulario(alunoParaSerAlterado);
-            Toast.makeText(this, "Aluno: "+alunoParaSerAlterado.getNome(), Toast.LENGTH_SHORT).show();
         }
 
         botao.setOnClickListener(new OnClickListener() {
@@ -54,10 +55,39 @@ public class FormularioActivity extends Activity {
                 dao.close();
 
                 finish();
+            }
+        });
 
-                Toast.makeText(FormularioActivity.this, "Objeto aluno criado!",
-                        Toast.LENGTH_SHORT).show();
+        ImageView foto = helper.getBotaoImagem();
+        foto.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                localArquivoFoto = Environment.getExternalStorageDirectory() +
+                        "/"+ System.currentTimeMillis()+".jpg";
+
+                File arquivo = new File(localArquivoFoto);
+                Uri localFoto = Uri.fromFile(arquivo);
+
+                Intent irParaCamera =
+                        new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                irParaCamera.putExtra(MediaStore.EXTRA_OUTPUT, localFoto);
+                startActivityForResult(irParaCamera, TIRA_FOTO);
+
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == TIRA_FOTO) {
+            if (resultCode == Activity.RESULT_OK) {
+                helper.carregaImagem(this.localArquivoFoto);
+            } else {
+                this.localArquivoFoto = null;
+            }
+        }
+    }
 }
+
