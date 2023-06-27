@@ -1,3 +1,5 @@
+import adapter.ListaAlunosAdapter;
+
 public class ListaAlunosActivity extends Activity {
 
     private ListView listaAlunos;
