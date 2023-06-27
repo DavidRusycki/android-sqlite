@@ -1,3 +1,5 @@
+package activities;
+
 import adapter.ListaAlunosAdapter;
 
 public class ListaAlunosActivity extends Activity {
@@ -25,7 +27,8 @@ public class ListaAlunosActivity extends Activity {
                 Aluno alunoSelecionado = (Aluno) listaAlunos
                         .getItemAtPosition(position);
 
-                edicao.putExtra(Extras.ALUNO_SELECIONADO, alunoSelecionado);
+                edicao.putExtra(Extras.ALUNO_SELECIONADO,
+                        alunoSelecionado);
                 startActivity(edicao);
 
             }
